@@ -1,26 +1,37 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { withFirebase } from './services/Firebase';
+import generateUid from './services/uid'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  componentDidMount() {
+    const firebase = this.props.firebase;
+    const uid = generateUid()
+
+    var userStatusDatabaseRef = firebase.database.ref('/online/' + uid);
+    debugger
+
+    firebase.database.ref('.info/connected').on('value', (snapshot) => {
+      // If we're not currently connected, don't do anything.
+      if (snapshot.val() === false) return;
+
+      userStatusDatabaseRef.onDisconnect()
+                           .set(null) //delete record once disconnected
+                           .then(() => userStatusDatabaseRef.set(true));
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="App-container">
+          <p></p>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default withFirebase(App);
