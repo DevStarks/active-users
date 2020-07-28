@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import app from 'firebase/app';
 import 'firebase/database';
 
 const config = {
@@ -8,7 +8,9 @@ const config = {
 
 class Firebase {
   constructor() {
-    firebase.initializeApp(config);
+    app.initializeApp(config);
+
+    this.database = app.database()
   }
 }
 
