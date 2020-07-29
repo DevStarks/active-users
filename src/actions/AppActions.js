@@ -6,16 +6,16 @@ export const updateActiveUserCount = (database, uid) => {
     // If not currently connected, don't do anything.
     if (snapshot.val() === false) return;
 
-    userStatusDatabaseRef.onDisconnect()
-                         .set(false)
-                         .then(() => userStatusDatabaseRef.set(true));
+    return userStatusDatabaseRef.onDisconnect()
+                                .set(false)
+                                .then(() => userStatusDatabaseRef.set(true));
   });
-}
+};
 
 export const subscribeToActiveUserCount = (database, callback) => {
   const onlineUsersRef = database.ref('/status');
 
-  onlineUsersRef.orderByValue().startAt(true).on('value', (snapshot) => {
+  return onlineUsersRef.orderByValue().startAt(true).on('value', (snapshot) => {
     callback(snapshot.numChildren())
   })
-}
+};
