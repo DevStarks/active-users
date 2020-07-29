@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { withFirebase } from './services/Firebase';
 import generateUid from './services/uid'
+import Cookies from 'js-cookie'
 
 class App extends React.Component {
 
@@ -12,6 +13,12 @@ class App extends React.Component {
 
     var userStatusDatabaseRef = firebase.database.ref('/online/' + uid);
     debugger
+  setCookie() {
+    if(!Cookies.get('uid')){
+      Cookies.set('uid', generateUid());
+    }
+    this.setState({ uid: Cookies.get('uid') });
+  }
 
     firebase.database.ref('.info/connected').on('value', (snapshot) => {
       // If we're not currently connected, don't do anything.
