@@ -1,8 +1,13 @@
 import React from 'react';
-import './App.css';
+import PropTypes from 'prop-types'
+import './styles/App.css';
 import { withFirebase } from './services/Firebase';
 import generateUid from './utils/uid'
 import Cookies from 'js-cookie'
+import {
+  updateActiveUserCount,
+  subscribeToActiveUserCount
+} from './actions/AppActions'
 
 class App extends React.Component {
   constructor(props) {
@@ -18,8 +23,8 @@ class App extends React.Component {
   async componentDidMount() {
     await this.setCookie();
 
-    this.updateActiveUserCount();
-    this.subscribeToActiveUserCount();
+    updateActiveUserCount(this.state.uid, this.props.firebase.database);
+    subscribeToActiveUserCount(this.onUserCountUpdated.bind(this));
   }
 
   setCookie() {
@@ -29,30 +34,10 @@ class App extends React.Component {
     this.setState({ uid: Cookies.get('uid') });
   }
 
-  updateActiveUserCount() {
-    const firebase = this.props.firebase;
-    const userStatusDatabaseRef = firebase.database.ref('/online/' + this.state.uid);
-    const dbRef = firebase.database.ref('.info/connected');
-
-    dbRef.on('value', (snapshot) => {
-      // If we're not currently connected, don't do anything.
-      if (snapshot.val() === false) return;
-
-      userStatusDatabaseRef.onDisconnect()
-                           .set(false)
-                           .then(() => userStatusDatabaseRef.set(true));
-    });
-  }
-
-  subscribeToActiveUserCount() {
-    const firebase = this.props.firebase;
-    const onlineUsersRef = firebase.database.ref('/online');
-
-    onlineUsersRef.orderByValue().startAt(true).on('value', (snapshot) => {
-      this.setState({
-        activeUserCount: snapshot.numChildren(),
-        loading: false
-      })
+  onUserCountUpdated(snapshot) {
+    this.setState({
+      activeUserCount: snapshot.numChildren(),
+      loading: false
     });
   }
 
@@ -82,5 +67,9 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  firebase: PropTypes.object.isRequired
+};
 
 export default withFirebase(App);

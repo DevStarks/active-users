@@ -1,0 +1,26 @@
+.App {
+  text-align: center;
+}
+
+.App-container {
+  background-color: #CFEBDF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.App-link {
+  color: black;
+}
+
+.App-content {
+  width: 40%;
+}
+
+.App-userCount {
+  font-size: 1.5em;
+}
