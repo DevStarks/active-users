@@ -1,4 +1,4 @@
-export const updateActiveUserCount = (uid, database) => {
+export const updateActiveUserCount = (database, uid) => {
   const userStatusDatabaseRef = database.ref('/status/' + uid);
   const dbRef = database.ref('.info/connected');
 
@@ -15,5 +15,7 @@ export const updateActiveUserCount = (uid, database) => {
 export const subscribeToActiveUserCount = (database, callback) => {
   const onlineUsersRef = database.ref('/status');
 
-  onlineUsersRef.orderByValue().startAt(true).on('value', callback)
+  onlineUsersRef.orderByValue().startAt(true).on('value', (snapshot) => {
+    callback(snapshot.numChildren())
+  })
 }

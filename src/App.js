@@ -21,10 +21,11 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
+    const db = this.props.firebase.database;
     await this.setCookie();
 
-    updateActiveUserCount(this.state.uid, this.props.firebase.database);
-    subscribeToActiveUserCount(this.onUserCountUpdated.bind(this));
+    updateActiveUserCount(db, this.state.uid);
+    subscribeToActiveUserCount(db, this.onUserCountUpdated.bind(this));
   }
 
   setCookie() {
@@ -34,9 +35,9 @@ class App extends React.Component {
     this.setState({ uid: Cookies.get('uid') });
   }
 
-  onUserCountUpdated(snapshot) {
+  onUserCountUpdated(newCount) {
     this.setState({
-      activeUserCount: snapshot.numChildren(),
+      activeUserCount: newCount,
       loading: false
     });
   }

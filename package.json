@@ -35,5 +35,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "firebase-server": "^1.1.0"
+  }
 }

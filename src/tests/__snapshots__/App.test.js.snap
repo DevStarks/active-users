@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="App-container"
+  >
+    <p>
+      Loading...
+    </p>
+  </div>
+</div>
+`;
