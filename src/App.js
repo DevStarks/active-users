@@ -47,7 +47,7 @@ class App extends React.Component {
       <div className="App-content">
         <h1>Welcome!</h1>
         <h3>Including yours, this many browsers are currently accessing this app:</h3>
-        <span className="App-userCount">{this.state.activeUserCount}</span>
+        <span className="App-userCount">{this.state.activeUserCount || 1}</span>
       </div>
     );
   }
